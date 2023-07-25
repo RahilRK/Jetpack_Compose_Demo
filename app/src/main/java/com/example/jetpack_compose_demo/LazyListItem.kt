@@ -1,4 +1,4 @@
-package com.example.jetpack_compose_demo.ui
+package com.example.jetpack_compose_demo
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.jetpack_compose_demo.R
 
 
 /*todo here we are creating LazyList like Recycler view and it's item with it's array data and model class*/
