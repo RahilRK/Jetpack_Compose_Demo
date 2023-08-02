@@ -40,6 +40,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -47,6 +49,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.jetpack_compose_demo.R
+import com.example.jetpack_compose_demo.ui.categoryList.CategoryListScreen
+import com.example.jetpack_compose_demo.ui.categoryList.CategoryListViewModel
+import com.example.jetpack_compose_demo.ui.mealList.MealListScreen
 import com.example.jetpack_compose_demo.ui.screen.ListItem
 import com.example.jetpack_compose_demo.ui.screen.NotificationCounter
 import com.example.jetpack_compose_demo.ui.screen.NotificationMessageCard
@@ -62,6 +67,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            TextFieldC()
 //            CircleImageC()
 //            LazyListC()
 //            NotificationScreen()
@@ -72,11 +78,30 @@ class MainActivity : ComponentActivity() {
 //            DerivedStateOf()
 //            CategoryListScreen()
 //            MealListScreen()
-            App()
+//            App()
+//            CategoryApp()
         }
     }
 }
 
+@Composable
+fun CategoryApp() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "categoryListScreen") {
+        composable(route = "categoryListScreen") {
+            CategoryListScreen(onClick = { strCategory ->
+                navController.navigate("mealListScreen/$strCategory")
+            })
+        }
+        composable(route = "mealListScreen/{strCategory}", arguments = listOf(
+            navArgument("strCategory") {
+                type = NavType.StringType
+            }
+        )) {
+            MealListScreen()
+        }
+    }
+}
 
 @Composable
 fun App() {
@@ -129,7 +154,7 @@ fun ScreenOne(navController: NavHostController) {
 }
 
 @Composable
-fun ScreenTwo(navigate: (name: String)-> Unit) {
+fun ScreenTwo(navigate: (name: String) -> Unit) {
 
     Column(
         modifier = Modifier
@@ -216,7 +241,7 @@ fun ButtonC() {
 @Composable
 fun TextFieldC() {
 
-    val getValue = remember { mutableStateOf("") }
+    val getValue = rememberSaveable { mutableStateOf("") }
     TextField(value = getValue.value,
         onValueChange = {
             getValue.value = it

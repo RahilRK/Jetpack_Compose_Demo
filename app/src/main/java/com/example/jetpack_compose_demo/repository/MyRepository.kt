@@ -5,6 +5,7 @@ import com.example.jetpack_compose_demo.data.model.Meal
 import com.example.jetpack_compose_demo.data.remote.ApiInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class MyRepository @Inject constructor(
