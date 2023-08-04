@@ -2,29 +2,56 @@ package com.example.jetpack_compose_demo.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -33,14 +60,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -49,14 +82,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.jetpack_compose_demo.R
+import com.example.jetpack_compose_demo.data.model.ToggleData
 import com.example.jetpack_compose_demo.ui.categoryList.CategoryListScreen
-import com.example.jetpack_compose_demo.ui.categoryList.CategoryListViewModel
 import com.example.jetpack_compose_demo.ui.mealList.MealListScreen
+import com.example.jetpack_compose_demo.ui.navigationBottomBar.NavigationBottomBar
+import com.example.jetpack_compose_demo.ui.navigationDrawer.NavigationDrawer
 import com.example.jetpack_compose_demo.ui.screen.ListItem
 import com.example.jetpack_compose_demo.ui.screen.NotificationCounter
 import com.example.jetpack_compose_demo.ui.screen.NotificationMessageCard
 import com.example.jetpack_compose_demo.ui.screen.TAG
 import com.example.jetpack_compose_demo.ui.screen.getEmployeeList
+import com.example.jetpack_compose_demo.ui.theme.Jetpack_Compose_DemoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -67,7 +103,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TextFieldC()
+//            TextFieldC()
 //            CircleImageC()
 //            LazyListC()
 //            NotificationScreen()
@@ -80,6 +116,7 @@ class MainActivity : ComponentActivity() {
 //            MealListScreen()
 //            App()
 //            CategoryApp()
+//            CheckBoxC()
         }
     }
 }
@@ -202,7 +239,7 @@ fun TextC(name: String = "Rahil") {
         text = "Hello $name!",
         fontStyle = FontStyle.Italic,
         fontWeight = FontWeight.Bold,
-        color = androidx.compose.ui.graphics.Color.Red,
+        color = Color.Red,
         fontSize = 24.sp,
 //        textAlign = TextAlign.Right
     )
@@ -223,17 +260,72 @@ fun ImageC() {
 @Composable
 fun ButtonC() {
 
-    Button(
-        onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
-            containerColor = androidx.compose.ui.graphics.Color.Red,
-            contentColor = androidx.compose.ui.graphics.Color.White,
-        )
+    val context = LocalContext.current
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(text = "Hello")
-        Image(
-            painter = painterResource(id = R.drawable.ic_add_certificate),
-            contentDescription = "demo"
-        )
+        Button(
+            onClick = {
+                Toast.makeText(context, "Button is clicked", Toast.LENGTH_SHORT).show()
+            },
+            /*colors = ButtonDefaults.buttonColors(
+                           containerColor = Color.Blue,
+                           contentColor = Color.White,
+                       ),*/
+//            shape = RoundedCornerShape(4.dp),
+        ) {
+            Text(text = "Create a new account")
+        }
+
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedButton(
+            onClick = {
+                Toast.makeText(context, "Button is clicked", Toast.LENGTH_SHORT).show()
+            },
+        ) {
+            Text(text = "I have an existing account")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        ElevatedButton(
+            onClick = {
+                Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show()
+            },
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = "",
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Add to cart")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        FilledTonalButton(
+            onClick = {
+                Toast.makeText(context, "Button is clicked", Toast.LENGTH_SHORT).show()
+            },
+        ) {
+            Text(text = "Open in browser")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextButton(
+            onClick = {
+                Toast.makeText(context, "Button is clicked", Toast.LENGTH_SHORT).show()
+            },
+        ) {
+            Text(text = "Learn more")
+        }
     }
 }
 
@@ -242,11 +334,102 @@ fun ButtonC() {
 fun TextFieldC() {
 
     val getValue = rememberSaveable { mutableStateOf("") }
-    TextField(value = getValue.value,
-        onValueChange = {
-            getValue.value = it
-        },
-        label = { Text(text = "Enter name") })
+    val context = LocalContext.current
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        TextField(
+            value = getValue.value,
+            /*readOnly = true,*/
+            onValueChange = {
+                getValue.value = it
+            },
+            /*label = { Text(text = "Enter your name") },*/
+            placeholder = {
+                Text(text = "Name")
+            },
+            leadingIcon = {
+                Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "")
+            },
+            trailingIcon = {
+                if (getValue.value.isNotBlank()) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "",
+                        modifier = Modifier.clickable {
+
+                            getValue.value = ""
+                        })
+                }
+            },
+            /*prefix = {
+                Text(text = "+91")
+            }*/
+            /*supportingText = {
+                Text(text = "Invalid name")
+            },
+            isError = true*/
+//            visualTransformation = PasswordVisualTransformation()
+            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    Toast.makeText(context, "Done is clicked", Toast.LENGTH_SHORT).show()
+                }
+            )
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        OutlinedTextField(
+            value = getValue.value,
+            /*readOnly = true,*/
+            onValueChange = {
+                getValue.value = it
+            },
+            /*label = { Text(text = "Enter your name") },*/
+            placeholder = {
+                Text(text = "Name")
+            },
+            leadingIcon = {
+                Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "")
+            },
+            trailingIcon = {
+                if (getValue.value.isNotBlank()) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "",
+                        modifier = Modifier.clickable {
+
+                            getValue.value = ""
+                        })
+                }
+            },
+            /*prefix = {
+                Text(text = "+91")
+            }*/
+            /*supportingText = {
+                Text(text = "Invalid name")
+            },
+            isError = true*/
+//            visualTransformation = PasswordVisualTransformation()
+            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    Toast.makeText(context, "Done is clicked", Toast.LENGTH_SHORT).show()
+                }
+            )
+        )
+
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -487,5 +670,182 @@ fun DerivedStateOf() {
     }
 
     Text(text = result.value, fontSize = 16.sp)
+}
+
+@Preview
+@Composable
+fun CheckBoxC() {
+
+    val mainActivityViewModel: MainActivityViewModel = viewModel()
+    val getCheckedValue by mainActivityViewModel.checkBox_isChecked.collectAsState()
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+
+        Checkbox(checked = getCheckedValue, onCheckedChange = {
+
+            mainActivityViewModel.checkBoxEvent(it)
+
+        }, colors = CheckboxDefaults.colors(uncheckedColor = Color.Blue, checkedColor = Color.Blue))
+        Text(
+            text = "Check me",
+            color = Color.Blue,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
+fun CheckBoxList() {
+
+    val checkboxes = remember {
+        mutableStateListOf(
+            ToggleData(title = "Cricket", isChecked = false),
+            ToggleData(title = "Volleyball", isChecked = false),
+            ToggleData(title = "Video game", isChecked = false)
+        )
+    }
+
+    checkboxes.forEachIndexed { index, model ->
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            Checkbox(
+                checked = model.isChecked,
+                onCheckedChange = { isChecked ->
+                    checkboxes[index] = model.copy(
+                        isChecked = isChecked
+                    )
+                },
+                colors = CheckboxDefaults.colors(
+                    uncheckedColor = Color.Blue,
+                    checkedColor = Color.Blue
+                )
+            )
+            Text(
+                text = model.title,
+                color = Color.Blue,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+
+    }
+}
+
+@Preview
+@Composable
+fun PreviewCheckBoxes() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+
+        Text(text = "Choose your hobbies", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+        CheckBoxList()
+    }
+}
+
+@Preview
+@Composable
+fun Switch() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+
+        val mainActivityViewModel: MainActivityViewModel = viewModel()
+        val getCheckedValue by mainActivityViewModel.switch_isChecked.collectAsState()
+
+        Text(
+            modifier = Modifier.padding(start = 8.dp),
+            text = getCheckedValue.title,
+            fontSize = 20.sp,
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        androidx.compose.material3.Switch(
+            modifier = Modifier.padding(end = 8.dp),
+            checked = getCheckedValue.isChecked,
+            onCheckedChange = {
+
+                if (it) {
+                    mainActivityViewModel.switchEvent(ToggleData(title = "Light Mode", true))
+                } else {
+                    mainActivityViewModel.switchEvent(ToggleData(title = "Dark Mode", false))
+                }
+
+            },
+        )
+    }
+}
+
+@Composable
+fun RadioButtonList() {
+
+    val radioButtons = remember {
+        mutableStateListOf(
+            ToggleData(title = "Cricket", isChecked = true),
+            ToggleData(title = "Volleyball", isChecked = false),
+            ToggleData(title = "Video game", isChecked = false)
+        )
+    }
+
+    radioButtons.forEachIndexed { index, model ->
+        Row(verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable {
+
+                radioButtons.replaceAll {
+                    it.copy(
+                        isChecked = it.title == model.title
+                    )
+                }
+            }) {
+
+            RadioButton(
+                selected = model.isChecked,
+                onClick = {
+                    radioButtons.replaceAll {
+                        it.copy(
+                            isChecked = it.title == model.title
+                        )
+                    }
+                },
+            )
+            Text(
+                text = model.title,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewRadioButton() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+
+        Text(text = "Select your hobbies", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+        RadioButtonList()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NavDrawerPreview() {
+    Jetpack_Compose_DemoTheme {
+        Surface(content = {
+            NavigationDrawer()
+        })
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NavigationBottomBarPreview() {
+    Jetpack_Compose_DemoTheme {
+        NavigationBottomBar()
+    }
 }
 
