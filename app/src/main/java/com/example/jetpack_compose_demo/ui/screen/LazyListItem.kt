@@ -2,6 +2,7 @@ package com.example.jetpack_compose_demo.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -36,7 +37,12 @@ fun PreviewListItem() {
 }
 
 @Composable
-fun ListItem(resID: Int, name: String, designation: String) {
+fun ListItem(
+    resID: Int,
+    name: String,
+    designation: String,
+    onItemClick: (model: Employee) -> Unit = {}
+) {
 
     Card(
         elevation = CardDefaults.cardElevation(
@@ -58,6 +64,9 @@ fun ListItem(resID: Int, name: String, designation: String) {
                 modifier = Modifier
 //                    .weight(.2f)
                     .size(60.dp)
+                    .clickable {
+                        onItemClick(Employee(resId = resID, name = name, designation = designation))
+                    }
                     .padding(8.dp)
                     .clip(CircleShape)
                     .border(1.dp, Color.LightGray, CircleShape),
@@ -92,7 +101,7 @@ data class Employee(
     val designation: String = "",
 )
 
-fun getEmployeeList(): List<Employee> {
+fun getEmployeeList(): MutableList<Employee> {
 
     val list = mutableListOf<Employee>()
     list.add(Employee(name = "Rahil", designation = "Developer"))

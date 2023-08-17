@@ -6,9 +6,11 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,10 +33,13 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -43,9 +48,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -61,6 +68,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -92,6 +100,7 @@ import com.example.jetpack_compose_demo.ui.screen.NotificationCounter
 import com.example.jetpack_compose_demo.ui.screen.NotificationMessageCard
 import com.example.jetpack_compose_demo.ui.screen.TAG
 import com.example.jetpack_compose_demo.ui.screen.getEmployeeList
+import com.example.jetpack_compose_demo.ui.searchview.SearchViewScreenC
 import com.example.jetpack_compose_demo.ui.theme.Jetpack_Compose_DemoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -117,6 +126,8 @@ class MainActivity : ComponentActivity() {
 //            App()
 //            CategoryApp()
 //            CheckBoxC()
+//            PreviewCheckBoxes()
+            SearchViewScreenC()
         }
     }
 }
@@ -542,8 +553,56 @@ fun CircleImageC() {
 @Composable
 fun LazyListC() {
 
+    val context = LocalContext.current
+    val list = getEmployeeList()
+
     LazyColumn(content = {
-        items(getEmployeeList()) { model ->
+        items(list) { model ->
+
+            /*val mState = rememberDismissState(
+                confirmValueChange = {
+                    if (it == DismissValue.DismissedToEnd) {
+                        list.remove(model)
+                    }
+                    true
+                }
+            )
+            SwipeToDismiss(state = mState, background = {
+                val color =
+                    if (mState.dismissDirection == DismissDirection.StartToEnd) {
+                        Color.Transparent
+                    } else if (mState.dismissDirection == DismissDirection.EndToStart) {
+                        Color.Red
+                    } else {
+                        Color.Transparent
+                    }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = color)
+                        .padding(10.dp)
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .align(Alignment.CenterEnd),
+                        imageVector = Icons.Outlined.DeleteOutline,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Color.White)
+                    )
+                }
+            }, dismissContent = {
+                ListItem(
+                    resID = model.resId,
+                    name = model.name,
+                    designation = model.designation,
+                    onItemClick = { model ->
+                        list.remove(model)
+                        Toast.makeText(context, model.name, Toast.LENGTH_SHORT).show()
+                    })
+            }, directions = setOf(DismissDirection.EndToStart))*/
+
             ListItem(resID = model.resId, name = model.name, designation = model.designation)
         }
     }, modifier = Modifier.padding(4.dp))
