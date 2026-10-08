@@ -124,10 +124,10 @@ class MainActivity : ComponentActivity() {
 //            CategoryListScreen()
 //            MealListScreen()
 //            App()
-//            CategoryApp()
+            CategoryApp()
 //            CheckBoxC()
 //            PreviewCheckBoxes()
-            SearchViewScreenC()
+//            SearchViewScreenC()
         }
     }
 }
